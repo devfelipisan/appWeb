@@ -1,0 +1,56 @@
+{% extends "index/index.html" %}
+
+{% block content %}
+<section>
+    <div class="container-fluid row mx-auto p-5" style="width: max-content;">
+        <div class="jumbotron" style="min-width: max-content;">
+            <div class="container-fluid mx-auto px-auto" style="width:max-content;">
+                <h1 class="display-5">{{ information.nome_unidade }}</h1>
+            </div>
+            <hr class="my-4">
+            <div class="m-auto p-auto">
+                <form id="form_Cadastro" class="needs-validation" novalidate action="{% url 'cadastro_unidade' %}"
+                    method="POST">
+                    <table class="container-fluid">
+                        <tr>
+                            <td>
+                                Nome da unidade
+                            </td>
+                            <td>
+                                <input type="text" class="form-control disabled" value="{{ information.nome_unidade }}"
+                                    readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Cursos Necessários:
+                            </td>
+                            <td class="mx-5">
+                                <div class="border overflow-auto my-4 py-0 px-1"
+                                    style="min-width: max-content; height: max-content; max-height: 100px;">
+                                    {% for item in lista_cursos %}
+                                    <small><span class="py-0"> {{ item }}</span></small><br>
+                                    {% endfor %}
+                                </div>
+
+                            </td>
+                        </tr>
+                    </table>
+                    <hr class="my-4">
+                    <div class="container mx-auto">
+                        <div class="container-fluig row">
+                            <div class="col-md-2 mx-2">
+                                <a href="{% url 'cadastro_unidade' %}" class="btn btn-primary">Voltar</a>
+                            </div>
+                            <div class="col-md-2 mx-2">
+                                <!-- Aqui deve entrar a função deletar -->
+                                <a href="#" class="btn btn-danger">Deletar</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

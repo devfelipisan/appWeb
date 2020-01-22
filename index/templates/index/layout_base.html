@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  {% block header %}{% endblock %}
+</head>
+
+<body>
+  <header>
+    {% block nav %}{% endblock %}
+  </header>
+  <section>
+    {% block content %}
+    {% endblock %}
+  </section>
+  {% block footer %}
+  {% endblock %}
+</body>
+</html>

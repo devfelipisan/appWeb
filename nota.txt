@@ -1,0 +1,364 @@
+"""
+ovl%xzv_pr%0+7r*#%*un$u+49q*tq4csdh4$xb5xp4$8j4qv*
+
+Pegar icones da fonte https://www.flaticon.com/br?utm_term=flaticon&utm_campaign=fi_busqueda_brasil&utm_source=adwords&utm_medium=ppc&hsa_acc=5490559948&hsa_cam=1841778624&hsa_grp=70091914939&hsa_ad=346006066075&hsa_src=g&hsa_tgt=aud-832891818404:kwd-298552490138&hsa_kw=flaticon&hsa_mt=b&hsa_net=adwords&hsa_ver=3&gclid=EAIaIQobChMI_4vBlI7o5gIVDwSRCh29iAmIEAAYASAAEgI3DPD_BwE
+
+Pegar exemplo https://imasters.com.br/desenvolvimento/conhecendo-o-jinja2-um-mecanismo-para-templates-no-flask
+
+https://jinja.palletsprojects.com/en/2.10.x/templates/#variables
+
+https://stackoverflow.com/questions/11556958/sending-data-from-html-form-to-a-python-script-in-flask
+
+https://imasters.com.br/desenvolvimento/conhecendo-o-jinja2-um-mecanismo-para-templates-no-flask
+
+https://getbootstrap.com.br/docs/4.1/components/card/
+
+=======================================================================================================================================
+                                        Versão 0.0
+
+Tela configurador
+    cadastro de frente de serviço
+        Obrigatoriedade de curso por frente
+    
+    Cadastro de cursos (ver com sms)
+
+Cadastro de equipe
+    condicionar com a data inicio ne fim de embarque
+
+Class Funcionários
+    idFuncionario :inteiro(autonumerado)
+    Nome :lista[string]
+    funcao :lista[string]
+    sispat :inteiro
+    cpf :inteiro
+    disponivel :bool
+
+Class Equipe
+    idEquipe :inteiro(autonumerado)
+    supervisor :funcionario.Nome AND funcionario.funcao == "Supervisor"
+    opareadorGuincho :funcionario.Nome AND funcionario.funcao == "opareadorGuincho"
+    operadorOxCorte :funcionario.Nome AND funcionario.funcao == "operadorOxCorte"
+    rigger :funcionario.Nome AND funcionario.funcao == "rigger"
+
+Class Unidade
+    idUnidade :inteiro(autonumerado)
+    dataInicial :inteiro
+    dataFim :inteiro
+    equipe :lista[Equipe.idEquipe]
+
+Class Relatório
+    idRelatorio :inteiro(autonumerado)
+    item :inteiro(autonumerado)
+    descricao :string
+    foto :lista[imagem.imagem]
+
+Class imagem
+    Relatório.idRelatorio
+    idImagem :inteiro(autonumerado)
+    imagem :file
+
+=======================================================================================================================================
+                                                
+
+classes - OK
+
+    Cadastro de nova unidade: Ok
+        Instancia a classe "novaUnidade" que recebe:
+            idUnidade:Interger
+            nomeUnidade:String
+            dataInicial:dateTime
+            dataFim:dateTime
+            localEmbarque:String
+            horaEmbarque:dateTime
+            localDesembarque:String
+            horaDesembarque:dateTime
+            cursosObrigatório: cadastroCursos.nome(FK)
+
+            frenteEmbarcada:novaFrente.id(FK) - Removido, pois será controlado pela frente
+
+    cadastro de cursos: - OK
+        Instancia a classe "controleCurso" que recebe:
+            idCurso:Interger
+            nomeCurso:String
+            validadeCurso:Interger
+
+    Cadastro de novo funcionário: - OK
+        Instancia a classe "novoFuncionario" que recebe:
+            matriculaFuncionario:Interger
+            nomeCompleto:String
+            funcao:String
+            sispat:Interger
+            cpf:Interger
+            dataNascimento:dateTime
+            disponivel:Bool
+                A variável disponível altera para "False" caso o funcionario esteja em alguma
+                frente atendendo alguma unidade e True para caso oposto.
+                Também verifica se o funcionário está com todos os cursos em dia.
+
+    Certificado do Curso para o funcionario: - OK
+        Instancia a classe "certificadoCurso" que recebe:
+            idCurso:Interger
+            idFuncionario:Interger
+            cargaHoraria:Interger
+            aprovado:Booleano
+
+    cadastro de novaFrente: - OK
+        Instancia a classe "novaFrente" que recebe:
+            idFrente = str("frente_")+(novaunidade.nomeUnidade)+(_)+(contador)
+            supervisor:String
+            opGuincho:String
+            opOxCorte:String
+            riggerA:String
+            rigguerB:String
+            prevDisponibilidade:novaUnidade.dataFIm(FK)
+
+Funções - Pendente
+    novaUnidade - Ok
+        + cadastrarNovaUnidade(
+            + idUnidade:Interger,
+            + nomeUnidade:String,
+            + dataEmbarque:Date,
+            + localEmbarque:String,
+            + horaEmbarque:Date,
+            + dataDesembarque:Date,
+            + localDesembarque:String,
+            + horaDesembarque:Date,
+            + cursosObrigatorio:List
+            )
+        + alterarNovaUnidade(idUnidade,
+            OR(
+            + idUnidade:Interger,
+            + nomeUnidade:String,
+            + dataEmbarque:Date,
+            + localEmbarque:String,
+            + horaEmbarque:Date,
+            + dataDesembarque:Date,
+            + localDesembarque:String,
+            + horaDesembarque:Date,
+            + cursosObrigatorio:List
+            )
+            )
+        + deletarNovaUnidade(
+            idUnidade,idFrente(caso tenha))
+
+    controleCurso - Pendente analisar o percentual geral
+        + cadastrarCurso(parametros) 
+        + percentualCursosValido(parametros)
+
+    novoFuncionario - OK
+        + cadastrarFuncionario(nome,funcao,sispat,cpf,dataNascimento,True)
+        + alterarFuncionario(idFuncionario,atributo)
+        + deletarFuncionario(idFuncionario)
+
+    certificadoCurso - pendente validação do curso
+        + idCertificado: - OK
+            composição do código: ano 4 dígitos + mês 2 dígitos
+            + numerador contando o número de certificados impressos começando a partir de 1000001
+        + cursoValido((dataAtual-dataRealizada)==90):returnBoolean - pendente
+    
+    novaFrente
+        + programarNovaFrente(todos os parametros)
+            Verifica a data local e hora do embarque e desembarque
+            Verifica para cada colaborador se atende os requisitos cursos solicitados pela unidade
+        + alterarProgramacaoFrente(idUnidade,atributo)
+            altera o funcionario para sua respectiva função
+        + deletarNovaFrente(idFrente)
+            remove a frente(equipe) da programação na unidade.
+
+relatório por módulos - Não iniciado
+
+    cadastro de novaUnidade:
+        Relatório filtrado por:
+            Quantidade de frentes embarcadas
+            Média de dias embarcados
+   
+    cadastro de novoCursos:
+        Relatório filtrado por:
+            percentual de cursos válidos comparado ao total
+
+    cadastroFuncionarios:
+        Relatório filtrado por:
+            data de validade de curso menor que 90 dias e vencidos.
+            data de liberação de frente em unidade.
+             
+    cadastro de novaFrente:
+        Relatório filtrado por:
+            Dias embarcados por cada frente
+
+Interface Gráfica
+    Rotas - Pendente
+
+        cadastro de novaUnidade: - OK
+            /cadastroUnidade
+
+            + previsaoDisponibilidade(
+                dataDesembarque-dataEmbarque),
+                return em dias
+    
+        cadastro de novoCursos:
+            /cadastroCurso
+
+        cadastroFuncionarios:
+            /cadastroFuncionario
+                
+        cadastro de novaFrente:
+            /cadastroFrente
+
+    TelaUsuário
+        cadastro de novaUnidade:
+            tela /cadastroUnidade
+    
+        cadastro de novoCursos:
+            tela /cadastroCurso
+
+        cadastroFuncionarios:
+            tela /cadastroFuncionario
+                
+        cadastro de novaFrente:
+            tela /cadastroFrente
+
+Falta criar o relacionamento entre as classes.
+
+Página arquivo teste confeccionando o layout 
+verificar a possibilidade de utilizar o cookie para armazenamento da lista.
+
+====================================================================================================================================================
+                                     Versão 0.2
+
+Modelo
+
+    unidadesCadastrada
+        id:Interger
+        nome_unidade:String
+        cursos_necesarios:controleCurso.nome(FK) - relação muitos para muitos
+        
+        Retornará somente o nome da unidade.
+
+
+
+    controleCurso
+        id:Interger
+        nome_curso:String
+        validade_curso:Interger
+        norma_curso:String
+        carga_hora_curso:Interger
+
+        retornará o nome do curso
+
+
+
+    funcionarioCadastrado
+        id:Interger
+        matricula_funcionario:Interger
+        nome_completo_funcionario:String
+        funcao_funcionario:String
+        cpf_funcionario:Interger
+        sispat_funcionario:Interger
+        disponibilidadeFuncionario:Bool
+            A variável disponível altera para "False" caso o funcionario esteja em alguma
+            frente atendendo alguma unidade e True para caso oposto.
+            Também verifica se o funcionário está com todos os cursos em dia.
+
+        retornará matrícula, nome completo e disponibilidade
+
+
+
+    certificadoFuncionario:
+        Instancia a classe "certificadoCurso" que recebe:
+            nome_funcionario:funcionarioCadastrado(PK)
+            curso_funcionario:controleCurso(PK)
+            data_realizada:Interger
+            valido_ate:Interger
+        
+            retornará nome_funcionario, curso_funcionario
+
+    frenteProgramada
+        id = Interger
+        nome_unidade:unidadesCadastrada(pk)
+        local_embarque:String
+        data_ini_unidade:Interger
+        local_desembarque:String
+        data_fim_unidade:Interger
+        sup_frente:funcionarioCadastrado.funcao==sup(PK)
+        op_guincho_frente:funcionarioCadastrado.funcao==op_guincho(PK)
+        op_oxcorte_frente:funcionarioCadastrado.funcao==op_oxcorte(PK)
+        rigger_a_frente:funcionarioCadastrado.funcao==rigger(PK)
+        rigger_b_frente:funcionarioCadastrado.funcao==rigger(PK)
+
+        retornará a data da programação
+       
+
+Funções - Pendente
+    novaUnidade - Ok
+        + cadastrarNovaUnidade(
+            + idUnidade:Interger,
+            + nomeUnidade:String,
+            + dataEmbarque:Date,
+            + localEmbarque:String,
+            + horaEmbarque:Date,
+            + dataDesembarque:Date,
+            + localDesembarque:String,
+            + horaDesembarque:Date,
+            + cursosObrigatorio:List
+            )
+        + alterarNovaUnidade(idUnidade,
+            OR(
+            + idUnidade:Interger,
+            + nomeUnidade:String,
+            + dataEmbarque:Date,
+            + localEmbarque:String,
+            + horaEmbarque:Date,
+            + dataDesembarque:Date,
+            + localDesembarque:String,
+            + horaDesembarque:Date,
+            + cursosObrigatorio:List
+            )
+            )
+        + deletarNovaUnidade(
+            idUnidade,idFrente(caso tenha))
+
+    controleCurso - Pendente analisar o percentual geral
+        + cadastrarCurso(parametros) 
+        + percentualCursosValido(parametros)
+
+    novoFuncionario - OK
+        + cadastrarFuncionario(nome,funcao,sispat,cpf,dataNascimento,True)
+        + alterarFuncionario(idFuncionario,atributo)
+        + deletarFuncionario(idFuncionario)
+
+    certificadoCurso - pendente validação do curso
+        + idCertificado: - OK
+            composição do código: ano 4 dígitos + mês 2 dígitos
+            + numerador contando o número de certificados impressos começando a partir de 1000001
+        + cursoValido((dataAtual-dataRealizada)==90):returnBoolean - pendente
+    
+    novaFrente
+        + programarNovaFrente(todos os parametros)
+            Verifica a data local e hora do embarque e desembarque
+            Verifica para cada colaborador se atende os requisitos cursos solicitados pela unidade
+        + alterarProgramacaoFrente(idUnidade,atributo)
+            altera o funcionario para sua respectiva função
+        + deletarNovaFrente(idFrente)
+            remove a frente(equipe) da programação na unidade.
+
+relatório por módulos - Não iniciado
+
+    cadastro de novaUnidade:
+        Relatório filtrado por:
+            Quantidade de frentes embarcadas
+            Média de dias embarcados
+   
+    cadastro de novoCursos:
+        Relatório filtrado por:
+            percentual de cursos válidos comparado ao total
+
+    cadastroFuncionarios:
+        Relatório filtrado por:
+            data de validade de curso menor que 90 dias e vencidos.
+            data de liberação de frente em unidade.
+             
+    cadastro de novaFrente:
+        Relatório filtrado por:
+            Dias embarcados por cada frente
+
+Interface Gráfica
