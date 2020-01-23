@@ -9,33 +9,21 @@
             </div>
             <hr class="my-4">
             <div class="m-auto p-auto">
-                <form id="form_Cadastro" class="needs-validation" novalidate action="{% url 'cadastro_unidade' %}"
+                <form id="form_Cadastro" class="needs-validation" novalidate action="{% url 'alterar_unidade' information.id %}"
                     method="POST">
-                    <table class="container-fluid">
-                        <tr>
-                            <td>
-                                Nome da unidade
-                            </td>
-                            <td>
-                                <input type="text" class="form-control disabled" value="{{ information.nome_unidade }}"
-                                    readonly>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Cursos Necessários:
-                            </td>
-                            <td class="mx-5">
-                                <div class="border overflow-auto my-4 py-0 px-1"
-                                    style="min-width: max-content; height: max-content; max-height: 100px;">
-                                    {% for item in lista_cursos %}
-                                    <small><span class="py-0"> {{ item }}</span></small><br>
-                                    {% endfor %}
-                                </div>
-
-                            </td>
-                        </tr>
-                    </table>
+                    {% csrf_token %}
+                    <div class="fieldWrapper">
+                        <label>Cursos atualmente cadastrado</label>
+                        <ul>
+                            {% for curso in lista_cursos %}
+                            <li>{{curso.nome_curso}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="fieldWrapper">
+                        <label>Selecione os cursos obrigatórios</label>
+                        {{ form_cadastro_unidade.cursosObrigatorios }}
+                    </div>
                     <hr class="my-4">
                     <div class="container mx-auto">
                         <div class="container-fluig row">
@@ -43,8 +31,12 @@
                                 <a href="{% url 'cadastro_unidade' %}" class="btn btn-primary">Voltar</a>
                             </div>
                             <div class="col-md-2 mx-2">
+                                <button type="submit" class="btn btn-warning">Alterar</button>
+                                <!--<a href="{% url 'alterar_unidade' information.id %}" class="btn btn-primary">Alterar</a>-->
+                            </div>
+                            <div class="col-md-2 mx-2">
                                 <!-- Aqui deve entrar a função deletar -->
-                                <a href="#" class="btn btn-danger">Deletar</a>
+                                <a href="{% url 'deletar_unidade' information.id %}" class="btn btn-danger">Deletar</a>
                             </div>
                         </div>
                     </div>

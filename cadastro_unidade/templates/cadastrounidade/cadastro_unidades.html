@@ -54,7 +54,7 @@
             <hr class="container-fluid mx-auto">
             {% for unidade in lista_unidades_cadastradas %}
             <div class="list-group py-2 ">
-              <a href="{% url 'info_unidade' unidade.id %}" class="list-group-item list-group-item-action list-group-item-primary">{{ unidade }}</a>
+              <a href="{% url 'visualizar_unidade' unidade.id %}" class="list-group-item list-group-item-action list-group-item-primary">{{ unidade }}</a>
             </div>
             {% endfor %}
             </ul>
