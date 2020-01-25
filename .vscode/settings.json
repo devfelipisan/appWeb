@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "venvApp\\Scripts\\python.exe"
+    "python.pythonPath": "venvApp\\Scripts\\python.exe",
+    "python.formatting.provider": "black"
 }

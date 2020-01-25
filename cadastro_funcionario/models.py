@@ -2,9 +2,15 @@ from django.db import models
 from cadastro_curso.models import cadastroCurso
 
 class cadastroFuncionario(models.Model):
+    opcao_funcao = [
+        ['supervisor','Supervisor'],
+        ['opGuincho','Operador de Guincho'],
+        ['opOxCorte','Operador de OxCorte'],
+        ['rigger','Rigger']
+    ]
     matricula_funcionario = models.IntegerField(primary_key=True)
     nome_completo_funcionario = models.CharField(max_length=64)
-    funcao_funcionario = models.CharField(max_length=64)
+    funcao_funcionario = models.CharField(max_length=64, choices=opcao_funcao)
     cpf_funcionario = models.IntegerField()
     sispat_funcionario = models.IntegerField()
     disponibilidade_funcionario = models.BooleanField(default=True)
@@ -16,7 +22,7 @@ class cadastroFuncionario(models.Model):
             return f"Não disponível para embarque"
 
     def __str__(self):
-        return f"{self.matricula_funcionario} - {self.nome_completo_funcionario} - {self.disponivel()}"
+        return f"{self.nome_completo_funcionario}"
 
 class certificadoFuncionario(models.Model):
     nome_funcionario = models.ForeignKey(cadastroFuncionario, on_delete=models.CASCADE)

@@ -9,21 +9,25 @@ mensagemcadastroexistente = "<div style='margin: auto; width: 50%; padding: 10px
 def cadastro_unidade(request, *args):
     form_cadastro_unidade = forms_unidade(request.POST)
     if request.method == "POST":
+        print('Unidade recebeu um methodo POST')
         if form_cadastro_unidade.is_valid():
-            nomeUnidade = form_cadastro_unidade.cleaned_data['nomeUnidade']
-            cursosObrigatorios = form_cadastro_unidade.cleaned_data['cursosObrigatorios']
+            print('Formulário recebido é válido')
+            nome_unidade = form_cadastro_unidade.cleaned_data['nome_unidade']
+            cursos_necesarios = form_cadastro_unidade.cleaned_data['cursos_necesarios']
 
             try:
-                if not bool(cadastroUnidades.objects.filter(nome_unidade=nomeUnidade)):
-                    new_unidade = cadastroUnidades(nome_unidade=nomeUnidade.upper())
+                if not bool(cadastroUnidades.objects.filter(nome_unidade=nome_unidade)):
+                    new_unidade = cadastroUnidades(nome_unidade=nome_unidade)
                     new_unidade.save()
-                    for id in cursosObrigatorios:
-                        new_unidade.cursos_necesarios.add(cadastroCurso.objects.get(id=id))
+                    print('unidade cadastrada!')
+                    for id in cursos_necesarios:
+                        new_unidade.cursos_necesarios.set(cursos_necesarios)
                         new_unidade.save()
 
                     return HttpResponseRedirect('/unidade/cadastro')
                     
                 else:
+                    print('Já existe essa informação')
                     return HttpResponse(mensagemcadastroexistente)
             
             except Exception as error:
@@ -61,11 +65,11 @@ def alterar_unidade(request, id, *args):
     if request.method == "POST":
         #Deixei este if como not por não estarmos utilizando todos os campos do formulário nesta view
         if not form_cadastro_unidade.is_valid():
-            cursosObrigatorios = form_cadastro_unidade.cleaned_data['cursosObrigatorios']
+            cursos_necesarios = form_cadastro_unidade.cleaned_data['cursos_necesarios']
             alterar = cadastroUnidades.objects.get(id=id)
             alterar.cursos_necesarios.clear()
-            for id in cursosObrigatorios:
-                alterar.cursos_necesarios.add(cadastroCurso.objects.get(id=id))
+            for id in cursos_necesarios:
+                alterar.cursos_necesarios.set(cursos_necesarios)
                 alterar.save()
         
     return HttpResponseRedirect('/unidade/cadastro')

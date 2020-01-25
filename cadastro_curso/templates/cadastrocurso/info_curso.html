@@ -1,0 +1,84 @@
+{% extends "index/index.html" %}
+
+{% block content %}
+<section>
+  <div class="container-fluid row mx-auto p-5" style="width: max-content;">
+    <div class="jumbotron" style="min-width: max-content;">
+      <hr class="my-4">
+      <table>
+        <th>
+          Curso: {{ information.nome_curso }}
+          <tr>
+            <td>
+              Validade do curso:
+            </td>
+            <td>
+              {{ information.validade_curso }}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Norma baseada:
+            </td>
+            <td>
+              {{ information.norma_curso }}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Carga Horária:
+            </td>
+            <td>
+              {{ information.carga_hora_curso }}
+            </td>
+          </tr>
+        </th>
+      </table>
+      <hr class="my-4">
+      <div class="m-auto p-auto">
+        <form id="form_Cadastro" class="needs-validation" novalidate
+          action="{% url 'alterar_curso' information.id %}" method="POST">
+          {% csrf_token %}
+          {% for field in form_cadastro_curso %}
+          <table class="container-fluid">
+            <tr>
+              <td>
+                {{ field.label_tag }}
+              </td>
+              <td>
+                {{ field }}
+                {{ field.errors }}
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                {% if field.help_text %}
+                <small class="form-text text-muted mr-1">{{ field.help_text|safe }}</small>
+                {% endif %}
+              </td>
+            </tr>
+          </table>
+          {% endfor %}
+          <hr class="my-4">
+          <div class="container-fluig row">
+            <div class="col-md-2 mx-2">
+              <a href="{% url 'cadastro_curso' %}" class="btn btn-primary">Voltar</a>
+            </div>
+            <div class="col-md-2 mx-2">
+              <button type="submit" class="btn btn-primary" onclick="resetar_campos()"
+                style="width: 100px;">Alterar</button>
+            </div>
+            <div class="col-md-2 mx-2">
+              <!-- Aqui deve entrar a função deletar -->
+              <a href="{% url 'deletar_curso' information.id %}"
+                class="btn btn-danger">Deletar</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
