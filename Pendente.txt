@@ -1,0 +1,3 @@
+* Melhorar algoritmo de alterar dados(para os módulos de Funcionario, Unidade, cursos e programação de frente)
+* Melhorar a forma de visualizar informações
+* Melhorar 

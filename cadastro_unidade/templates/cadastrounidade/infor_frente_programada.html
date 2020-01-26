@@ -1,0 +1,72 @@
+{% extends "index/index.html" %}
+
+{% block content %}
+<section>
+    <div class="container-fluid row mx-auto p-5" style="width: max-content;">
+        <div class="jumbotron" style="min-width: max-content;">
+            <div class="container-fluid mx-auto px-auto" style="width:max-content;">
+                <h1 class="display-5">{{ information.nome_unidade }}</h1>
+            </div>
+            <hr class="my-4">
+            <div class="m-auto p-auto">
+                <form id="form_Cadastro" class="needs-validation" novalidate action="{% url 'alterar_programacao' information.id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="fieldWrapper">
+                        <label>Equipe programada para a unidade {{information.nome_unidade}}</label>
+                        <ul>
+                            <li>{{information.local_embarque}}</li>
+                            <li>{{information.data_ini_unidade}}</li>
+                            <li>{{information.local_desembarque}}</li>
+                            <li>{{information.data_fim_unidade}}</li>
+                            <li>{{information.sup_frente}}</li>
+                            <li>{{information.op_guincho_frente}}</li>
+                            <li>{{information.op_oxcorte_frente}}</li>
+                            <li>{{information.rigger_a_frente}}</li>
+                            <li>{{information.rigger_b_frente}}</li>
+                        </ul>
+                    </div>
+                    <div class="fieldWrapper">
+                        {% for field in form_cadastro_programar_frente %}
+                        <table class="container-fluid">
+                            <tr>
+                                <td>
+                                    {{ field.label_tag }}
+                                </td>
+                                <td>
+                                    {{ field }}
+                                    {{ field.errors }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                </td>
+                                <td>
+                                    {% if field.help_text %}
+                                    <small class="form-text text-muted mr-1">{{ field.help_text|safe }}</small>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </table>
+                        {% endfor %}
+                    </div>
+                    <hr class="my-4">
+                    <div class="container mx-auto">
+                        <div class="container-fluig row">
+                            <div class="col-md-2 mx-2">
+                                <a href="{% url 'programar_frente' %}" class="btn btn-primary">Voltar</a>
+                            </div>
+                            <div class="col-md-2 mx-2">
+                                <button type="submit" class="btn btn-warning">Alterar</button>
+                            </div>
+                            <div class="col-md-2 mx-2">
+                                <a href="{% url 'deletar_programacao' information.id %}"
+                                    class="btn btn-danger">Deletar</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
