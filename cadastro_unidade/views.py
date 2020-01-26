@@ -198,8 +198,8 @@ def alterar_frente_programada(request, id):
             print('Formulário passando pela lista funcionario selecionado')
 
             for funcionario in funcionario_selecionado:
-                alterar_status = cadastroFuncionario.objects.get(matricula_funcionario=funcionario.matricula_funcionario)
-                alterar_status.disponibilidade_funcionario = False
+                alterar_status = cadastroFuncionario.objects.get(matricula_funcionario=frenteProgramada.objects.get(id=id).funcionario)
+                alterar_status.disponibilidade_funcionario = True
                 alterar_status.save()
             print('Formulário passou pelo loop de alteração de status dos funcionários')
 

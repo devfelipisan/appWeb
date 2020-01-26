@@ -2,64 +2,62 @@
 
 {% block content %}
 <div class='container-fluig m-5 p-5'>
-    <div class="container-fluig row mx-auto p-5">
-        <div class="col-sm-6 col-lg-8 border p-2" style="height:max-content;">
-          <div class="jumbotron">
-            <div class="container-fluid mx-auto px-auto">
-              {% if mensagem %}
-                <h1 class="text-danger">{{ mensagem }}</h1>
-              {% endif %}
-              <h1 class="display-5">Cadastro de novas unidades</h1>
-            </div>
-            <p class="lead">Formulário para cadastro de novas unidades e programação de frente de serviço</p>
-            <hr class="my-4">
-            <div class="m-auto p-auto">
-              <form id="form_Cadastro" class="needs-validation" novalidate action="{% url 'cadastro_unidade' %}" method="POST">
-                {% csrf_token %}
-                {% for field in form_cadastro_unidade %}
-                <table class="container-fluid">
-                  <tr>
-                    <td>
-                      {{ field.label_tag }}
-                    </td>
-                    <td>
-                      {{ field }}
-                      {{ field.errors }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                    </td>
-                    <td>
-                      {% if field.help_text %}
-                      <small class="form-text text-muted mr-1">{{ field.help_text|safe }}</small>
-                      {% endif %}
-                    </td>
-                  </tr>
-                </table>
-                {% endfor %}
-                <hr class="my-4">
-                <div class="py-3 mx-auto" style="width: 100px;">
-                  <button type="submit" class="btn btn-primary" onclick="resetar_campos()"
-                    style="width: 100px;">Cadastrar</button>
-                </div>
-              </form>
-            </div>
-          </div>
+  <div class="container-fluig row mx-auto p-5">
+    <div class="col-sm-6 col-lg-8 border p-2" style="height:max-content;">
+      <div class="jumbotron">
+        <div class="container-fluid mx-auto px-auto">
+          {% if mensagem %}
+          <h1 class="text-danger">{{ mensagem }}</h1>
+          {% endif %}
+          <h1 class="display-5">Cadastro de novas unidades</h1>
         </div>
-        <div class="col-6 col-lg-4 border p-2 overflow-auto"
-          style="min-width: max-content; height: max-content; max-height: 750px;">
-          <div class="jumbotron">
-            <h2 class="display-5">Unidades cadastradas</h2>
-            <hr class="container-fluid mx-auto">
-            {% for unidade in lista_unidades_cadastradas %}
-            <div class="list-group py-2 ">
-              <a href="{% url 'visualizar_unidade' unidade.id %}" class="list-group-item list-group-item-action list-group-item-primary">{{ unidade }}</a>
-            </div>
-            {% endfor %}
-            </ul>
+        <p class="lead">Formulário para cadastro de novas unidades e programação de frente de serviço</p>
+        <hr class="my-4">
+        <form id="form_Cadastro" class="needs-validation" novalidate action="{% url 'cadastro_unidade' %}"
+          method="POST">
+          {% csrf_token %}
+          {% for field in form_cadastro_unidade %}
+          <table class="container-fluid">
+            <tr>
+              <td>
+                {{ field.label_tag }}
+              </td>
+              <td>
+                {{ field }}
+                {{ field.errors }}
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                {% if field.help_text %}
+                <small class="form-text text-muted mr-1">{{ field.help_text|safe }}</small>
+                {% endif %}
+              </td>
+            </tr>
+          </table>
+          {% endfor %}
+          <hr class="my-4">
+          <div class="py-3 mx-auto" style="width: 100px;">
+            <button type="submit" class="btn btn-primary" onclick="resetar_campos()"
+              style="width: 100px;">Cadastrar</button>
           </div>
-        </div>
+        </form>
       </div>
+    </div>
+    <div class="col-6 col-lg-4 border p-2 overflow-auto" style="height:max-content;">
+      <div class="jumbotron">
+        <h3 class="display-5">Unidades cadastradas</h3>
+        <hr class="my-4">
+        {% for unidade in lista_unidades_cadastradas %}
+        <div class="list-group py-2 ">
+          <a href="{% url 'visualizar_unidade' unidade.id %}"
+            class="list-group-item list-group-item-action list-group-item-primary">{{ unidade }}</a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
