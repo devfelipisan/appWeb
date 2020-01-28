@@ -3,8 +3,10 @@ from django.shortcuts import render
 from .models import cadastroUnidades, frenteProgramada
 from .forms import forms_unidade, forms_frente_programada
 from cadastro_curso.models import cadastroCurso
-from cadastro_funcionario.models import cadastroFuncionario
+from cadastro_funcionario.models import cadastroFuncionario, certificadoFuncionario
+from datetime import date
 
+hoje = date.today()
 mensagemcadastroexistente = "<div style='margin: auto; width: 50%; padding: 10px;'><p><h1 style='color:#B00020;'>Já existe um cadastro com esses dados</h1></p><br><input type='button' value='Voltar a página de cadastro' onclick='history.go(-1)'></div>"
 
 def cadastro_unidade(request, *args):
@@ -150,7 +152,10 @@ def programar_frente(request):
         disponibilidade_funcionario=False).filter(funcao_funcionario='opGuincho').all()
     context['form_cadastro_programar_frente'].fields['sup_frente'].queryset = cadastroFuncionario.objects.exclude(
         disponibilidade_funcionario=False).filter(funcao_funcionario='supervisor').all()
-    
+    #for i in range(len(cadastroUnidades.objects.get(id=nome_unidade.id).cursos_necesarios.all())):
+    #context['form_cadastro_programar_frente'].fields['sup_frente'].queryset = cadastroFuncionario.objects.filter(curso_funcionario=3).all()
+            #cadastroUnidades.objects.get(id=3).cursos_necesarios.all()[0].id)
+
     return render(request, "cadastrounidade/frente_unidade_programada.html", context)
 
 def infor_frente_programada(function):

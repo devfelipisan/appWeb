@@ -3,80 +3,95 @@
 {% block content %}
 <section>
   <div class="container-fluid row mx-auto p-5" style="width: max-content;">
-    <div class="jumbotron" style="min-width: max-content;">
-      <hr class="my-4">
-      <table>
-        <th>
-          {{ information.nome_completo_funcionario }}
-          <tr>
-            <td>
-              Função:
-            </td>
-            <td>
-              {{ information.funcao_funcionario }}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              CPF:
-            </td>
-            <td>
-              {{ information.cpf_funcionario }}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Sispat:
-            </td>
-            <td>
-              {{ information.sispat_funcionario }}
-            </td>
-          </tr>
-        </th>
-      </table>
-      <hr class="my-4">
-      <div class="m-auto p-auto">
-        <form id="form_Cadastro" class="needs-validation" novalidate
-          action="{% url 'alterar_funcionario' information.matricula_funcionario %}" method="POST">
-          {% csrf_token %}
-          {% for field in form_cadastro_funcionario %}
-          <table class="container-fluid">
+    <div class="col-sm-6 col-lg-8 border p-2" style="height:max-content;">
+      <div class="jumbotron" style="min-width: max-content;">
+        <hr class="my-4">
+        <table>
+          <th>
+            {{ information.nome_completo_funcionario }}
             <tr>
               <td>
-                {{ field.label_tag }}
+                Função:
               </td>
               <td>
-                {{ field }}
-                {{ field.errors }}
+                {{ information.funcao_funcionario }}
               </td>
             </tr>
             <tr>
               <td>
+                CPF:
               </td>
               <td>
-                {% if field.help_text %}
-                <small class="form-text text-muted mr-1">{{ field.help_text|safe }}</small>
-                {% endif %}
+                {{ information.cpf_funcionario }}
               </td>
             </tr>
-          </table>
-          {% endfor %}
+            <tr>
+              <td>
+                Sispat:
+              </td>
+              <td>
+                {{ information.sispat_funcionario }}
+              </td>
+            </tr>
+          </th>
+        </table>
+        <hr class="my-4">
+        <div class="m-auto p-auto">
+          <form id="form_Cadastro" class="needs-validation" novalidate
+            action="{% url 'alterar_funcionario' information.matricula_funcionario %}" method="POST">
+            {% csrf_token %}
+            {% for field in form_cadastro_funcionario %}
+            <table class="container-fluid">
+              <tr>
+                <td>
+                  {{ field.label_tag }}
+                </td>
+                <td>
+                  {{ field }}
+                  {{ field.errors }}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                </td>
+                <td>
+                  {% if field.help_text %}
+                  <small class="form-text text-muted mr-1">{{ field.help_text|safe }}</small>
+                  {% endif %}
+                </td>
+              </tr>
+            </table>
+            {% endfor %}
+            <hr class="my-4">
+            <div class="container-fluig row">
+              <div class="col-md-2 mx-2">
+                <a href="{% url 'cadastro_funcionario' %}" class="btn btn-primary">Voltar</a>
+              </div>
+              <div class="col-md-2 mx-2">
+                <button type="submit" class="btn btn-primary" onclick="resetar_campos()"
+                  style="width: 100px;">Alterar</button>
+              </div>
+              <div class="col-md-2 mx-2">
+                <!-- Aqui deve entrar a função deletar -->
+                <a href="{% url 'deletar_funcionario' information.matricula_funcionario %}"
+                  class="btn btn-danger">Deletar</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-4 border p-2 overflow-auto" style="height:max-content;">
+      <div style="min-height: min-content; max-height: 500px;">
+        <div class="jumbotron">
+          <h3 class="display-5">Funcionarios Cadastrados</h3>
           <hr class="my-4">
-          <div class="container-fluig row">
-            <div class="col-md-2 mx-2">
-              <a href="{% url 'cadastro_funcionario' %}" class="btn btn-primary">Voltar</a>
-            </div>
-            <div class="col-md-2 mx-2">
-              <button type="submit" class="btn btn-primary" onclick="resetar_campos()"
-                style="width: 100px;">Alterar</button>
-            </div>
-            <div class="col-md-2 mx-2">
-              <!-- Aqui deve entrar a função deletar -->
-              <a href="{% url 'deletar_funcionario' information.matricula_funcionario %}"
-                class="btn btn-danger">Deletar</a>
-            </div>
+          {% for curso in lista_cursos_ativos %}
+          <div class="list-group py-2 ">
+            <a href="#" class="list-group-item list-group-item-action list-group-item-primary">{{ curso }}</a>
           </div>
-        </form>
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>

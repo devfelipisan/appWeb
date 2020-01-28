@@ -27,8 +27,8 @@ class cadastroFuncionario(models.Model):
 class certificadoFuncionario(models.Model):
     nome_funcionario = models.ForeignKey(cadastroFuncionario, on_delete=models.CASCADE)
     curso_funcionario = models.ForeignKey(cadastroCurso, on_delete=models.CASCADE)
-    data_realizada = models.DateTimeField()
-    valido_ate = models.DateTimeField()
+    data_realizada = models.DateField()
+    valido_ate = models.DateField()
     
     def __str__(self):
-        return f"{self.nome_funcionario} -> {self.curso_funcionario}"
+        return f"{self.curso_funcionario} \n válido até {self.valido_ate}"

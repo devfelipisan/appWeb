@@ -13,3 +13,14 @@ class forms_funcionario(forms.ModelForm):
             'sispat_funcionario',
             'disponibilidade_funcionario',
         ]
+
+class forms_certificado_funcionario(forms.ModelForm):
+
+    class Meta:
+        model = certificadoFuncionario
+        fields = [
+            'nome_funcionario',
+            'curso_funcionario',
+            'data_realizada',
+            'valido_ate',
+        ]

@@ -9,7 +9,7 @@
           {% if mensagem %}
           <h1 class="text-danger">{{ mensagem }}</h1>
           {% endif %}
-          <h1 class="display-5">Cadastro de novas unidades</h1>
+          <h1 class="display-5 text-justify text-center">Cadastro de novas unidades</h1>
         </div>
         <p class="lead">Formulário para cadastro de novas unidades e programação de frente de serviço</p>
         <hr class="my-4">
@@ -47,15 +47,17 @@
       </div>
     </div>
     <div class="col-6 col-lg-4 border p-2 overflow-auto" style="height:max-content;">
-      <div class="jumbotron">
-        <h3 class="display-5">Unidades cadastradas</h3>
-        <hr class="my-4">
-        {% for unidade in lista_unidades_cadastradas %}
-        <div class="list-group py-2 ">
-          <a href="{% url 'visualizar_unidade' unidade.id %}"
-            class="list-group-item list-group-item-action list-group-item-primary">{{ unidade }}</a>
+      <div style="min-height: min-content; max-height: 650px;">
+        <div class="jumbotron">
+          <h3 class="display-5">Unidades cadastradas</h3>
+          <hr class="my-4">
+          {% for unidade in lista_unidades_cadastradas %}
+          <div class="list-group py-2 ">
+            <a href="{% url 'visualizar_unidade' unidade.id %}"
+              class="list-group-item list-group-item-action list-group-item-primary">{{ unidade }}</a>
+          </div>
+          {% endfor %}
         </div>
-        {% endfor %}
       </div>
     </div>
   </div>

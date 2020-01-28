@@ -5,11 +5,14 @@
   <div class="container-fluig row mx-auto p-5">
     <div class="col-sm-6 col-lg-8 border p-2" style="height:max-content;">
       <div class="jumbotron">
-        <h1 class="display-4">Página para pprogramar a frente para a unidade.</h1>
-        <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to
-          featured content or information.</p>
+        <div class="container-fluid mx-auto px-auto">
+          {% if mensagem %}
+          <h1 class="text-danger">{{ mensagem }}</h1>
+          {% endif %}
+          <h1 class="display-5 text-justify text-center">Programação de Equipe</h1>
+        </div>
+        <p class="lead">Formulário para programar uma equipe para uma frente de serviço</p>
         <hr class="my-4">
-
         <form id="form_Cadastro" class="needs-validation" novalidate action="{% url 'programar_frente' %}"
           method="POST">
           {% csrf_token %}
@@ -43,19 +46,24 @@
         </form>
 
       </div>
+
     </div>
     <div class="col-6 col-lg-4 border p-2 overflow-auto"" style=" height:max-content;">
-      <div class="jumbotron">
-        <h3 class="display-5">Lista de Frente Programada</h3>
-        <hr class="my-4">
-
-        {% for frente in lista_frentes_programadas %}
-        <div class="list-group py-2 ">
-          <a href="{% url 'visualizar_programacao' frente.id %}" class="list-group-item list-group-item-action list-group-item-primary">{{ frente }}</a>
+      <div style="min-height: min-content; max-height: 850px;">
+        <div class="jumbotron">
+          <h3 class="display-5">Lista de Frente Programada</h3>
+          <hr class="my-4">
+          {% for frente in lista_frentes_programadas %}
+          <div class="list-group py-2 ">
+            <a href="{% url 'visualizar_programacao' frente.id %}"
+              class="list-group-item list-group-item-action list-group-item-primary">{{ frente }}</a>
+          </div>
+          <div class="list-group py-2 ">
+            <a href="{% url 'visualizar_programacao' frente.id %}"
+              class="list-group-item list-group-item-action list-group-item-primary">{{ frente }}</a>
+          </div>
+          {% endfor %}
         </div>
-        {% endfor %}
-
-
       </div>
     </div>
   </div>

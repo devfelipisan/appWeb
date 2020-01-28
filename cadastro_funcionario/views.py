@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
-from .forms import forms_funcionario
-from .models import cadastroFuncionario
+from .forms import forms_funcionario, forms_certificado_funcionario
+from .models import cadastroFuncionario, certificadoFuncionario
 
 mensagemcadastroexistente = "<div style='margin: auto; width: 50%; padding: 10px;'><p><h1 style='color:#B00020;'>Já existe um cadastro com esses dados</h1></p><br><input type='button' value='Voltar a página de cadastro' onclick='history.go(-1)'></div>"
 
@@ -163,10 +163,9 @@ def visualizar_funcionario(request, id):
     )
 
     context={
-        'form_cadastro_funcionario': form_cadastro_funcionario,
-        "information":cadastroFuncionario.objects.get(
-            matricula_funcionario=id
-        )
+        "form_cadastro_funcionario": form_cadastro_funcionario,
+        "information":cadastroFuncionario.objects.get(matricula_funcionario=id),
+        "lista_cursos_ativos":certificadoFuncionario.objects.filter(nome_funcionario = id).all()
     }
     return render(
         request,
@@ -175,7 +174,65 @@ def visualizar_funcionario(request, id):
     )
 
 def certificado_funcionario(request):
+
+    forms_certificado = forms_certificado_funcionario(request.POST)
+    
+    if request.method == "POST":
+        print('formulário requisitado como POST')
+        
+        if forms_certificado.is_valid():
+            print('Formulário validado')
+            nome_funcionario = forms_certificado.cleaned_data[
+                'nome_funcionario'
+            ]
+            curso_funcionario = forms_certificado.cleaned_data[
+                'curso_funcionario'
+            ]
+            data_realizada = forms_certificado.cleaned_data[
+                'data_realizada'
+            ]
+            valido_ate = forms_certificado.cleaned_data[
+                'valido_ate'
+            ]
+            
+            try:
+                new_certified = certificadoFuncionario(
+                    nome_funcionario = nome_funcionario,
+                    curso_funcionario = curso_funcionario,
+                    data_realizada = data_realizada,
+                    valido_ate = valido_ate
+                )
+                new_certified.save()
+
+                return HttpResponseRedirect(
+                    '/funcionario/certificado'
+                )
+                            
+            except Exception as error:
+                print(error)
+                return HttpResponseRedirect(
+                    '/funcionario/certificado'
+                )
+
+        else:
+            print(
+                'Formulário não validado'
+            )
+            
+            return HttpResponseRedirect(
+                '/funcionario/certificado'
+            )
+
+        return HttpResponseRedirect(
+            '/funcionario/certificado'
+        )
+
+    context = {
+        'forms_certificado': forms_certificado,
+    }
+    
     return render(
         request,
-        "cadastrofuncionario/certificado_funcionario.html"
+        "cadastrofuncionario/certificado_funcionario.html",
+        context
     )
