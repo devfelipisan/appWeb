@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from .forms import forms_funcionario, forms_certificado_funcionario
 from .models import cadastroFuncionario, certificadoFuncionario
+from cadastro_unidade.models import frenteProgramada
 
 mensagemcadastroexistente = "<div style='margin: auto; width: 50%; padding: 10px;'><p><h1 style='color:#B00020;'>Já existe um cadastro com esses dados</h1></p><br><input type='button' value='Voltar a página de cadastro' onclick='history.go(-1)'></div>"
 
@@ -71,6 +72,26 @@ def cadastro_funcionario(request):
         return HttpResponseRedirect(
             '/funcionario/cadastro'
         )
+    matricula = cadastroFuncionario.objects.all()
+    for i in range(1,len(matricula)-1):
+        if frenteProgramada.objects.filter(
+            sup_frente=matricula[i].matricula_funcionario
+            ) or frenteProgramada.objects.filter(
+                op_guincho_frente=matricula[i].matricula_funcionario
+                ) or frenteProgramada.objects.filter(
+                    op_oxcorte_frente=matricula[i].matricula_funcionario
+                    ) or frenteProgramada.objects.filter(
+                        rigger_a_frente=matricula[i].matricula_funcionario
+                        ) or frenteProgramada.objects.filter(
+                            rigger_b_frente=matricula[i].matricula_funcionario):
+            tornarDisponivel = cadastroFuncionario.objects.get(matricula_funcionario=matricula[i].matricula_funcionario)
+            tornarDisponivel.disponibilidade_funcionario = False
+            tornarDisponivel.save()
+                            
+        else:
+            tornarDisponivel = cadastroFuncionario.objects.get(matricula_funcionario=matricula[i].matricula_funcionario)
+            tornarDisponivel.disponibilidade_funcionario = True
+            tornarDisponivel.save()
 
     context = {
         'form_cadastro_funcionario': form_cadastro_funcionario,

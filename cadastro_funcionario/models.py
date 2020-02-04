@@ -14,12 +14,6 @@ class cadastroFuncionario(models.Model):
     cpf_funcionario = models.IntegerField()
     sispat_funcionario = models.IntegerField()
     disponibilidade_funcionario = models.BooleanField(default=True)
-    
-    def disponivel(disponibilidade_funcionario):
-        if disponibilidade_funcionario:
-            return f"Disponível para o embarque"
-        else:
-            return f"Não disponível para embarque"
 
     def __str__(self):
         return f"{self.nome_completo_funcionario}"

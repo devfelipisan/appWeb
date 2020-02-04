@@ -106,4 +106,4 @@ class frenteProgramada(models.Model):
     rigger_b_frente = models.ForeignKey(cadastroFuncionario, on_delete=models.CASCADE, related_name='nome_do_2_rigger')
 
     def __str__(self):
-        return f"Unidade {self.nome_unidade} - {self.data_ini_unidade}"
+        return f"{self.data_ini_unidade.day}/{self.data_ini_unidade.month}/{self.data_ini_unidade.year}"

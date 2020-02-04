@@ -85,10 +85,11 @@ def visualizar_unidade(request, id):
         'form_cadastro_unidade': form_cadastro_unidade,
         "information":cadastroUnidades.objects.get(id=id),
         "lista_cursos":cadastroUnidades.objects.get(id=id).cursos_necesarios.all(),
+        "lista_frentes_programadas": frenteProgramada.objects.filter(nome_unidade=id),
     }
     return render(request, "cadastrounidade/info_unidade.html", context)
 
-def programar_frente(request):
+def programar_frente(request, id=None):
     form_cadastro_programar_frente = forms_frente_programada(request.POST)
     if request.method == "POST":
         print("Frente Programada recebeu o formulário no método POST")
@@ -152,10 +153,7 @@ def programar_frente(request):
         disponibilidade_funcionario=False).filter(funcao_funcionario='opGuincho').all()
     context['form_cadastro_programar_frente'].fields['sup_frente'].queryset = cadastroFuncionario.objects.exclude(
         disponibilidade_funcionario=False).filter(funcao_funcionario='supervisor').all()
-    #for i in range(len(cadastroUnidades.objects.get(id=nome_unidade.id).cursos_necesarios.all())):
-    #context['form_cadastro_programar_frente'].fields['sup_frente'].queryset = cadastroFuncionario.objects.filter(curso_funcionario=3).all()
-            #cadastroUnidades.objects.get(id=3).cursos_necesarios.all()[0].id)
-
+    
     return render(request, "cadastrounidade/frente_unidade_programada.html", context)
 
 def infor_frente_programada(function):
@@ -180,7 +178,7 @@ def alterar_frente_programada(request, id):
     if request.method == "POST":
         print('Formulário recebido como POST')
         #Deixei este if como not por não estarmos utilizando todos os campos do formulário nesta view
-        if not form_cadastro_programar_frente.is_valid():
+        if form_cadastro_programar_frente.is_valid():
             print('Formulário validado')
             nome_unidade = form_cadastro_programar_frente.cleaned_data['nome_unidade']
             local_embarque = form_cadastro_programar_frente.cleaned_data['local_embarque']
@@ -200,26 +198,19 @@ def alterar_frente_programada(request, id):
                 rigger_a_frente,
                 rigger_b_frente,
             ]
-            print('Formulário passando pela lista funcionario selecionado')
-
-            for funcionario in funcionario_selecionado:
-                alterar_status = cadastroFuncionario.objects.get(matricula_funcionario=frenteProgramada.objects.get(id=id).funcionario)
-                alterar_status.disponibilidade_funcionario = True
-                alterar_status.save()
             print('Formulário passou pelo loop de alteração de status dos funcionários')
 
-            change_front = frenteProgramada(
-                nome_unidade=nome_unidade,
-                local_embarque=local_embarque,
-                data_ini_unidade=data_ini_unidade,
-                local_desembarque=local_desembarque,
-                data_fim_unidade=data_fim_unidade,
-                sup_frente=sup_frente,
-                op_guincho_frente=op_guincho_frente,
-                op_oxcorte_frente=op_oxcorte_frente,
-                rigger_a_frente=rigger_a_frente,
-                rigger_b_frente=rigger_b_frente,
-            )
+            change_front = frenteProgramada.objects.get(id=id)
+            change_front.nome_unidade=nome_unidade
+            change_front.local_embarque=local_embarque
+            change_front.data_ini_unidade=data_ini_unidade
+            change_front.local_desembarque=local_desembarque
+            change_front.data_fim_unidade=data_fim_unidade
+            change_front.sup_frente=sup_frente
+            change_front.op_guincho_frente=op_guincho_frente
+            change_front.op_oxcorte_frente=op_oxcorte_frente
+            change_front.rigger_a_frente=rigger_a_frente
+            change_front.rigger_b_frente=rigger_b_frente
             change_front.save()
             print('Alterações salvas do formulário')
     
@@ -230,8 +221,9 @@ def visualizar_frente_programada(request, id):
     form_cadastro_programar_frente = forms_frente_programada(request.POST)
 
     context={
-        'form_cadastro_programar_frente': form_cadastro_programar_frente,
+        "form_cadastro_programar_frente": form_cadastro_programar_frente,
         "information":frenteProgramada.objects.get(id=id),
+        "id_unidade":cadastroUnidades.objects.get(nome_unidade = frenteProgramada.objects.get(id=id).nome_unidade).id
     }
      #Filtra o contexto a ser exibido na view antes da renderização.
     context['form_cadastro_programar_frente'].fields['rigger_b_frente'].queryset = cadastroFuncionario.objects.exclude(
