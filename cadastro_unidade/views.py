@@ -137,16 +137,27 @@ def programar_frente(request, id):
         else:
             return HttpResponseRedirect('/unidade/info/'+str(id))
 
+    def testar_cursos():# Método não habilitado
 
-    lista_funcionarios = cadastroFuncionario.objects.filter(
-        matricula_funcionario__in=certificadoFuncionario.objects.all()
-        .values(
-            'nome_funcionario'
-            ).filter(
-                curso_funcionario__in=cadastroUnidades.objects.get(pk=id)
-                .cursos_necesarios.all()
-                )
-        )
+        for i in range(len(cadastroUnidades.objects.get(pk=id).cursos_necesarios.all())):
+            if cadastroUnidades.objects.get(pk=id).cursos_necesarios.get(id=cadastroUnidades.objects.get(pk=id).cursos_necesarios.all()[i].id):
+                pass
+            else:
+                return False
+
+        return True
+
+    def funcionarios_listados(id):
+        lista_funcionarios = cadastroFuncionario.objects.filter(
+            matricula_funcionario__in=certificadoFuncionario.objects.all()
+            .values(
+                'nome_funcionario'
+                ).filter(
+                    curso_funcionario__in=cadastroUnidades.objects.get(pk=id)
+                    .cursos_necesarios.all()
+                    )
+            )
+        return lista_funcionarios
 
     context = {
         'information':cadastroUnidades.objects.get(id=id),
@@ -154,15 +165,15 @@ def programar_frente(request, id):
         'lista_frentes_programadas': frenteProgramada.objects.all(),
     }
     #Filtra o contexto a ser exibido na view antes da renderização.
-    context['form_cadastro_programar_frente'].fields['rigger_b_frente'].queryset = lista_funcionarios.exclude(
+    context['form_cadastro_programar_frente'].fields['rigger_b_frente'].queryset = funcionarios_listados(id).exclude(
         disponibilidade_funcionario=False).filter(funcao_funcionario='rigger').all()
-    context['form_cadastro_programar_frente'].fields['rigger_a_frente'].queryset = lista_funcionarios.exclude(
+    context['form_cadastro_programar_frente'].fields['rigger_a_frente'].queryset = funcionarios_listados(id).exclude(
         disponibilidade_funcionario=False).filter(funcao_funcionario='rigger').all()
-    context['form_cadastro_programar_frente'].fields['op_oxcorte_frente'].queryset = lista_funcionarios.exclude(
+    context['form_cadastro_programar_frente'].fields['op_oxcorte_frente'].queryset = funcionarios_listados(id).exclude(
         disponibilidade_funcionario=False).filter(funcao_funcionario='opOxCorte').all()
-    context['form_cadastro_programar_frente'].fields['op_guincho_frente'].queryset = lista_funcionarios.exclude(
+    context['form_cadastro_programar_frente'].fields['op_guincho_frente'].queryset = funcionarios_listados(id).exclude(
         disponibilidade_funcionario=False).filter(funcao_funcionario='opGuincho').all()
-    context['form_cadastro_programar_frente'].fields['sup_frente'].queryset = lista_funcionarios.exclude(
+    context['form_cadastro_programar_frente'].fields['sup_frente'].queryset = funcionarios_listados(id).exclude(
         disponibilidade_funcionario=False).filter(funcao_funcionario='supervisor').all()
     
     return render(request, "cadastrounidade/frente_unidade_programada.html", context)
@@ -179,7 +190,7 @@ def deletar_frente_programada(request, id):
     print('Formulário sendo setado para deletar')
     deletar.delete()
     print('Formulário deletado')
-    return HttpResponseRedirect('/unidade/programar_frente')
+    return HttpResponseRedirect('/unidade/cadastro/')
 
 @infor_frente_programada
 def alterar_frente_programada(request, id):
@@ -225,7 +236,7 @@ def alterar_frente_programada(request, id):
             change_front.save()
             print('Alterações salvas do formulário')
     
-    return HttpResponseRedirect('/unidade/programar_frente')
+    return HttpResponseRedirect('/unidade/cadastro/')
 
 @infor_frente_programada
 def visualizar_frente_programada(request, id):

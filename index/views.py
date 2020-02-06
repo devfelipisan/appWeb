@@ -1,7 +1,8 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from random import randint
-from cadastro_funcionario.models import cadastroFuncionario
+from cadastro_funcionario.models import cadastroFuncionario,certificadoFuncionario
+from cadastro_curso.models import cadastroCurso
 
 def gerar_banco(request):
     nomes = [("Alice", 48439120001, 450538886), ('Miguel', 35145684053, 433035912), ('Sophia', 91617092045, 457021718), ('Arthur', 57592829053, 419148322), ('Helena', 68316465060, 482526506), ('Bernardo', 35959741075, 202262017), ('Valentina', 71405908009, 364578075), ('Heitor', 96997763073, 236694935), ('Laura', 87177237011, 505238706), ('Davi', 90050385003, 171741237), ('Isabella', 24666134093, 339232298), ('Lorenzo',                                                                                                                                                                                                                                                                                                                                                                                                                  9095856011, 256247882), ('Manuela', 58580501075, 374690108), ('Théo', 89207469073, 493158467), ('Júlia', 24678291032, 406826018), ('Pedro', 83888390044, 156630278), ('Heloísa', 82757793080, 196353403), ('Gabriel', 23778938053, 196353403), ('Luiza', 64482418099, 166693856), ('Enzo', 72668263069, 325084956), ('Maria', 8790817087, 385042164), ('Luiza', 22042722057, 180375581), ('Matheus', 36840120090, 105199345), ('Clara', 20681272023, 8885697), ('AnaBeatriz', 93526181578, 5794530), ('Vitória', 71181015839, 4018394), ('Olívia', 4073876686, 1562785), ('MariaFernanda', 4886616097, 1077963), ('Emilly', 36537142229, 8802574), ('MariaValentina', 63655833709, 2767881), ('Milena', 83372746201, 4230348), ('MariaHelena', 64106198630, 7282054), ('Bianca', 71342748964, 8198357),
@@ -20,12 +21,26 @@ def gerar_banco(request):
             disponibilidade_funcionario = True,
         )
         new_funcionario.save()
+        
+        for i in range(randint(1,2)):
+            new_certificado = certificadoFuncionario(
+                nome_funcionario=cadastroFuncionario.objects.get(matricula_funcionario=matricula),
+                curso_funcionario=cadastroCurso.objects.get(id=randint(1,8)),
+                data_realizada='2020-02-22',
+                valido_ate='2020-03-22',
+                )
+            new_certificado.save()
 
     print('processado com sucesso')
-    return HttpResponseRedirect('index/')
-
-def limpar_banco(request):
-    cadastroFuncionario.fullclean()
+    return HttpResponseRedirect('/')
 
 def index(request):
     return render(request, 'index/inicial.html', {'gerar_banco':gerar_banco})
+
+def limparBanco(request):
+    cadastroFuncionario.objects.all().delete()
+    return HttpResponseRedirect('/')
+
+def limparCertificado(request):
+    certificadoFuncionario.objects.all().delete()
+    return HttpResponseRedirect('/')
