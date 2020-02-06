@@ -66,8 +66,7 @@ def alterar_unidade(request, id, *args):
     alterar = cadastroUnidades.objects.get(id=id)
     form_cadastro_unidade = forms_unidade(request.POST)
     if request.method == "POST":
-        #Deixei este if como not por não estarmos utilizando todos os campos do formulário nesta view
-        if not form_cadastro_unidade.is_valid():
+        if not form_cadastro_unidade.is_valid():#Deixei este if como not por não estarmos utilizando todos os campos do formulário nesta view
             cursos_necesarios = form_cadastro_unidade.cleaned_data['cursos_necesarios']
             alterar = cadastroUnidades.objects.get(id=id)
             alterar.cursos_necesarios.clear()
@@ -89,13 +88,13 @@ def visualizar_unidade(request, id):
     }
     return render(request, "cadastrounidade/info_unidade.html", context)
 
-def programar_frente(request, id=None):
+def programar_frente(request, id):
     form_cadastro_programar_frente = forms_frente_programada(request.POST)
     if request.method == "POST":
         print("Frente Programada recebeu o formulário no método POST")
         if form_cadastro_programar_frente.is_valid():
             print('Formulário validado com sucesso')
-            nome_unidade = form_cadastro_programar_frente.cleaned_data['nome_unidade']
+            nome_unidade = cadastroUnidades.objects.get(id=id)
             local_embarque = form_cadastro_programar_frente.cleaned_data['local_embarque']
             data_ini_unidade = form_cadastro_programar_frente.cleaned_data['data_ini_unidade']
             local_desembarque = form_cadastro_programar_frente.cleaned_data['local_desembarque']
@@ -133,25 +132,37 @@ def programar_frente(request, id=None):
             )
             new_front.save()     
 
-            return HttpResponseRedirect('/unidade/programar_frente')
+            return HttpResponseRedirect('/unidade/info/'+str(id))
         
         else:
-            return HttpResponseRedirect('/unidade/programar_frente')
+            return HttpResponseRedirect('/unidade/info/'+str(id))
+
+
+    lista_funcionarios = cadastroFuncionario.objects.filter(
+        matricula_funcionario__in=certificadoFuncionario.objects.all()
+        .values(
+            'nome_funcionario'
+            ).filter(
+                curso_funcionario__in=cadastroUnidades.objects.get(pk=id)
+                .cursos_necesarios.all()
+                )
+        )
 
     context = {
+        'information':cadastroUnidades.objects.get(id=id),
         'form_cadastro_programar_frente': form_cadastro_programar_frente,
         'lista_frentes_programadas': frenteProgramada.objects.all(),
     }
     #Filtra o contexto a ser exibido na view antes da renderização.
-    context['form_cadastro_programar_frente'].fields['rigger_b_frente'].queryset = cadastroFuncionario.objects.exclude(
+    context['form_cadastro_programar_frente'].fields['rigger_b_frente'].queryset = lista_funcionarios.exclude(
         disponibilidade_funcionario=False).filter(funcao_funcionario='rigger').all()
-    context['form_cadastro_programar_frente'].fields['rigger_a_frente'].queryset = cadastroFuncionario.objects.exclude(
+    context['form_cadastro_programar_frente'].fields['rigger_a_frente'].queryset = lista_funcionarios.exclude(
         disponibilidade_funcionario=False).filter(funcao_funcionario='rigger').all()
-    context['form_cadastro_programar_frente'].fields['op_oxcorte_frente'].queryset = cadastroFuncionario.objects.exclude(
+    context['form_cadastro_programar_frente'].fields['op_oxcorte_frente'].queryset = lista_funcionarios.exclude(
         disponibilidade_funcionario=False).filter(funcao_funcionario='opOxCorte').all()
-    context['form_cadastro_programar_frente'].fields['op_guincho_frente'].queryset = cadastroFuncionario.objects.exclude(
+    context['form_cadastro_programar_frente'].fields['op_guincho_frente'].queryset = lista_funcionarios.exclude(
         disponibilidade_funcionario=False).filter(funcao_funcionario='opGuincho').all()
-    context['form_cadastro_programar_frente'].fields['sup_frente'].queryset = cadastroFuncionario.objects.exclude(
+    context['form_cadastro_programar_frente'].fields['sup_frente'].queryset = lista_funcionarios.exclude(
         disponibilidade_funcionario=False).filter(funcao_funcionario='supervisor').all()
     
     return render(request, "cadastrounidade/frente_unidade_programada.html", context)

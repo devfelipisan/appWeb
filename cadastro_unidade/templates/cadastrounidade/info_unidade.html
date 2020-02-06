@@ -50,7 +50,7 @@
                     <div class="jumbotron">
                         <h4 class="display-5">Equipes programadas</h4>
                         <div class="mx-auto px-2">
-                            <a href="{% url 'programar_frente' %}" class="btn btn-outline-primary">Nova Programação</a>
+                            <a href="{% url 'programar_frente' information.id %}" class="btn btn-outline-primary">Nova Programação</a>
                         </div>
                         <hr class="my-4">
                         {% for frente in lista_frentes_programadas %}

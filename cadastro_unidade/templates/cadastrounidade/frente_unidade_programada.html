@@ -13,7 +13,7 @@
         </div>
         <p class="lead">Formulário para programar uma equipe para uma frente de serviço</p>
         <hr class="my-4">
-        <form id="form_Cadastro" class="needs-validation" novalidate action="{% url 'programar_frente' %}"
+        <form id="form_Cadastro" class="needs-validation" novalidate action="{% url 'programar_frente' information.id %}"
           method="POST">
           {% csrf_token %}
           {% for field in form_cadastro_programar_frente %}
