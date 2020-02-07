@@ -5,6 +5,10 @@
   <div class="container-fluid row mx-auto p-5" style="width: max-content;">
     <div class="col-sm-6 col-lg-8 border p-2" style="height:max-content;">
       <div class="jumbotron" style="min-width: max-content;">
+        {%if embarcado %}
+        <hr class="my-4">
+        <h3 class="display-5">Atualmente embarcado na {{embarcado.nome_unidade}} até {{embarcado.data_fim_unidade}}</h3>
+        {% endif %}
         <hr class="my-4">
         <table>
           <th>
@@ -80,6 +84,7 @@
           </form>
         </div>
       </div>
+
     </div>
     <div class="col-6 col-lg-4 border p-2 overflow-auto" style="height:max-content;">
       <div style="min-height: min-content; max-height: 500px;">

@@ -182,8 +182,14 @@ def visualizar_funcionario(request, id):
     form_cadastro_funcionario = forms_funcionario(
         request.POST
     )
+    #sup_frente
+    #op_guincho_frente
+    #op_oxcorte_frente
+    #rigger_a_frente
+    #rigger_b_frente
 
     context={
+        #'embarque':frenteProgramada.objects.filter(cadastroFuncionario.objects.get(matricula_funcionario=id).nome_completo_funcionario__in=frenteProgramada.objects.all()),
         "form_cadastro_funcionario": form_cadastro_funcionario,
         "information":cadastroFuncionario.objects.get(matricula_funcionario=id),
         "lista_cursos_ativos":certificadoFuncionario.objects.filter(nome_funcionario = id).all()

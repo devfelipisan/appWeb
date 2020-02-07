@@ -2,66 +2,46 @@
 
 {% block content %}
 <div class='container-fluig m-5 p-5' style="min-width: 700px; max-width: max-content;">
-  <div class="container-fluig row mx-auto p-5">
-    <div class="col-sm-6 col-lg-8 border p-2" style="height:max-content;">
-      <div class="jumbotron">
-        <div class="container-fluid mx-auto px-auto">
-          {% if mensagem %}
-          <h1 class="text-danger">{{ mensagem }}</h1>
-          {% endif %}
-          <h1 class="display-5 text-justify text-center">Programação de Equipe</h1>
-        </div>
-        <p class="lead">Formulário para programar uma equipe para uma frente de serviço</p>
-        <hr class="my-4">
-        <form id="form_Cadastro" class="needs-validation" novalidate action="{% url 'programar_frente' information.id %}"
-          method="POST">
-          {% csrf_token %}
-          {% for field in form_cadastro_programar_frente %}
-          <table class="container-fluid">
-            <tr>
-              <td>
-                {{ field.label_tag }}
-              </td>
-              <td>
-                {{ field }}
-                {{ field.errors }}
-              </td>
-            </tr>
-            <tr>
-              <td>
-              </td>
-              <td>
-                {% if field.help_text %}
-                <small class="form-text text-muted mr-1">{{ field.help_text|safe }}</small>
-                {% endif %}
-              </td>
-            </tr>
-          </table>
-          {% endfor %}
-          <hr class="my-4">
-          <div class="py-3 mx-auto" style="width: 100px;">
-            <button type="submit" class="btn btn-primary" onclick="resetar_campos()"
-              style="width: 100px;">Programar</button>
-          </div>
-        </form>
-
-      </div>
-
+  <div class="jumbotron">
+    <div class="container-fluid mx-auto px-auto">
+      {% if mensagem %}
+      <h1 class="text-danger">{{ mensagem }}</h1>
+      {% endif %}
+      <h1 class="display-5 text-justify text-center">Programação de Equipe</h1>
     </div>
-    <div class="col-6 col-lg-4 border p-2 overflow-auto"" style=" height:max-content;">
-      <div style="min-height: min-content; max-height: 850px;">
-        <div class="jumbotron">
-          <h3 class="display-5">Lista de Frente Programada</h3>
-          <hr class="my-4">
-          {% for frente in lista_frentes_programadas %}
-          <div class="list-group py-2 ">
-            <a href="{% url 'visualizar_programacao' frente.id %}"
-              class="list-group-item list-group-item-action list-group-item-primary">{{ frente }}</a>
-          </div>
-          {% endfor %}
-        </div>
+    <p class="lead">Formulário para programar uma equipe para uma frente de serviço</p>
+    <hr class="my-4">
+    <form id="form_Cadastro" class="needs-validation" novalidate action="{% url 'programar_frente' information.id %}"
+      method="POST">
+      {% csrf_token %}
+      {% for field in form_cadastro_programar_frente %}
+      <table class="container-fluid">
+        <tr>
+          <td>
+            {{ field.label_tag }}
+          </td>
+          <td>
+            {{ field }}
+            {{ field.errors }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+          </td>
+          <td>
+            {% if field.help_text %}
+            <small class="form-text text-muted mr-1">{{ field.help_text|safe }}</small>
+            {% endif %}
+          </td>
+        </tr>
+      </table>
+      {% endfor %}
+      <hr class="my-4">
+      <div class="py-3 mx-auto" style="width: 100px;">
+        <button type="submit" class="btn btn-primary" onclick="resetar_campos()"
+          style="width: 100px;">Programar</button>
       </div>
-    </div>
+    </form>
   </div>
 </div>
 {% endblock %}

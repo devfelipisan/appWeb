@@ -13,7 +13,6 @@ class forms_frente_programada(forms.ModelForm):
     class Meta:
         model = frenteProgramada
         fields = [
-            "nome_unidade",
             "local_embarque",
             "data_ini_unidade",
             "local_desembarque",

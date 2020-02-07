@@ -5,6 +5,7 @@ from .forms import forms_unidade, forms_frente_programada
 from cadastro_curso.models import cadastroCurso
 from cadastro_funcionario.models import cadastroFuncionario, certificadoFuncionario
 from datetime import date
+from django.db.models import Q
 
 hoje = date.today()
 mensagemcadastroexistente = "<div style='margin: auto; width: 50%; padding: 10px;'><p><h1 style='color:#B00020;'>Já existe um cadastro com esses dados</h1></p><br><input type='button' value='Voltar a página de cadastro' onclick='history.go(-1)'></div>"
@@ -138,25 +139,19 @@ def programar_frente(request, id):
             return HttpResponseRedirect('/unidade/info/'+str(id))
 
     def testar_cursos():# Método não habilitado
-
         for i in range(len(cadastroUnidades.objects.get(pk=id).cursos_necesarios.all())):
-            if cadastroUnidades.objects.get(pk=id).cursos_necesarios.get(id=cadastroUnidades.objects.get(pk=id).cursos_necesarios.all()[i].id):
+            if cadastroUnidades.objects.get(pk=id).cursos_necesarios.all()[i]:
                 pass
             else:
                 return False
-
         return True
 
-    def funcionarios_listados(id):
-        lista_funcionarios = cadastroFuncionario.objects.filter(
-            matricula_funcionario__in=certificadoFuncionario.objects.all()
-            .values(
-                'nome_funcionario'
-                ).filter(
-                    curso_funcionario__in=cadastroUnidades.objects.get(pk=id)
-                    .cursos_necesarios.all()
-                    )
-            )
+    def funcionarios_listados(id):#Encontrar uma forma de dinamizar esta fórmula
+        a = certificadoFuncionario.objects.all().values('nome_funcionario').filter(Q(curso_funcionario=cadastroUnidades.objects.get(pk=8).cursos_necesarios.all()[0]))
+        #b = certificadoFuncionario.objects.all().values('nome_funcionario').filter(Q(curso_funcionario=cadastroUnidades.objects.get(pk=8).cursos_necesarios.all()[1]))
+        #c = certificadoFuncionario.objects.all().values('nome_funcionario').filter(Q(curso_funcionario=cadastroUnidades.objects.get(pk=8).cursos_necesarios.all()[2]))
+        inter = a#.intersection(b)
+        lista_funcionarios = cadastroFuncionario.objects.filter(matricula_funcionario__in=inter)
         return lista_funcionarios
 
     context = {
