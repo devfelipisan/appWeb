@@ -1,2 +1,2 @@
-# SEA - Sistema de Embarque ágil.
+# App-WEB
 Desenvolvimento de uma aplicação web através da plataforma Django

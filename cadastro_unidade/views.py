@@ -138,20 +138,30 @@ def programar_frente(request, id):
         else:
             return HttpResponseRedirect('/unidade/info/'+str(id))
 
-    def testar_cursos():# Método não habilitado
-        for i in range(len(cadastroUnidades.objects.get(pk=id).cursos_necesarios.all())):
-            if cadastroUnidades.objects.get(pk=id).cursos_necesarios.all()[i]:
-                pass
-            else:
-                return False
-        return True
+    #def testar_cursos():# Método não habilitado
+    #    for i in range(len(cadastroUnidades.objects.get(pk=id).cursos_necesarios.all())):
+    #        if cadastroUnidades.objects.get(pk=id).cursos_necesarios.all()[i]:
+    #            pass
+    #        else:
+    #            return False
+    #    return True
 
-    def funcionarios_listados(id):#Encontrar uma forma de dinamizar esta fórmula
-        a = certificadoFuncionario.objects.all().values('nome_funcionario').filter(Q(curso_funcionario=cadastroUnidades.objects.get(pk=8).cursos_necesarios.all()[0]))
+    def funcionarios_listados(id, i=len(cadastroUnidades.objects.get(pk=id).cursos_necesarios.all())-1, a=None, b=None):
+        print("")
+        b = a
+        print(f'a={a} e b={b}\n')
+        a = certificadoFuncionario.objects.all().values('nome_funcionario').filter(Q(curso_funcionario=cadastroUnidades.objects.get(pk=id).cursos_necesarios.all()[i]))
         #b = certificadoFuncionario.objects.all().values('nome_funcionario').filter(Q(curso_funcionario=cadastroUnidades.objects.get(pk=8).cursos_necesarios.all()[1]))
         #c = certificadoFuncionario.objects.all().values('nome_funcionario').filter(Q(curso_funcionario=cadastroUnidades.objects.get(pk=8).cursos_necesarios.all()[2]))
-        inter = a#.intersection(b)
-        lista_funcionarios = cadastroFuncionario.objects.filter(matricula_funcionario__in=inter)
+        print("i=",i)
+        if a and b:
+           a = a.intersection(b)
+
+        if i>0:
+            return funcionarios_listados(id, i-1, a, b)
+
+        lista_funcionarios = cadastroFuncionario.objects.filter(matricula_funcionario__in=a)
+        
         return lista_funcionarios
 
     context = {
@@ -159,6 +169,7 @@ def programar_frente(request, id):
         'form_cadastro_programar_frente': form_cadastro_programar_frente,
         'lista_frentes_programadas': frenteProgramada.objects.all(),
     }
+
     #Filtra o contexto a ser exibido na view antes da renderização.
     context['form_cadastro_programar_frente'].fields['rigger_b_frente'].queryset = funcionarios_listados(id).exclude(
         disponibilidade_funcionario=False).filter(funcao_funcionario='rigger').all()

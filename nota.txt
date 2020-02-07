@@ -1,3 +1,19 @@
+
+   def funcionarios_listados(id):#Encontrar uma forma de dinamizar esta fórmula
+        #lista=[]
+        #for i in range(len(cadastroUnidades.objects.get(id=id).cursos_necesarios.all())):
+        #    identificador_curso = cadastroUnidades.objects.get(id=id).cursos_necesarios.all()[i].id
+        #    lista.append(certificadoFuncionario.objects.all().values('nome_funcionario').filter(Q(curso_funcionario=cadastroUnidades.objects.get(pk=id).cursos_necesarios.get(id=identificador_curso))))
+        #intersect = []
+        #for i in range(1,len(lista)-1):
+            #intersect = lista[1].intersection(lista[i+1])
+            a = certificadoFuncionario.objects.all().values('nome_funcionario').filter(Q(curso_funcionario=cadastroUnidades.objects.get(pk=id).cursos_necesarios.all()[0]))
+            #c = certificadoFuncionario.objects.all().values('nome_funcionario').filter(Q(curso_funcionario=cadastroUnidades.objects.get(pk=8).cursos_necesarios.all()[1]))
+            intersect = a#.intersection(b)
+
+        lista_funcionarios = cadastroFuncionario.objects.filter(matricula_funcionario__in=intersect)
+        return lista_funcionarios
+
 """
 ovl%xzv_pr%0+7r*#%*un$u+49q*tq4csdh4$xb5xp4$8j4qv*
 
